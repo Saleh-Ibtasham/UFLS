@@ -127,6 +127,8 @@ int main()
     readfile();
     computeMedianDistance();
     allocateInitiallyFilteredSites();
+    computeCostOfFacility();
+    computeObjectiveFunction();
 
     return 0;
 }
