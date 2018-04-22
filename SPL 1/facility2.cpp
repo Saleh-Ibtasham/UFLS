@@ -12,6 +12,7 @@ vector < pair < int , double > > facilityRank;
 vector <int> *allocatedSites;
 
 double *totalCostOfFacility;
+int *demandPoint_is_allocated;
 
 void makemat()
 {
@@ -21,6 +22,7 @@ void makemat()
         costMat[i] = new double[numberOfFacility];
     allocationCostMat = new double[numberOfFacility];
     totalCostOfFacility = new double[numberOfFacility];
+    demandPoint_is_allocated = new int[numberOfDemandPoints];
 }
 
 void readfile()
@@ -94,8 +96,6 @@ void computeCostOfFacility()
 
 void allocateInitiallyFilteredSites()
 {
-    int demandPoint_is_allocated[numberOfDemandPoints];
-
     for(int i=0; i<numberOfDemandPoints; i++)
         demandPoint_is_allcoated[i] = 0;
 
@@ -120,6 +120,47 @@ void allocateInitiallyFilteredSites()
             allocatedSites[k].push_back(i);
             demandPoint_is_allocated[i] = 1;
         }
+
+}
+
+void findLeastCost(int allocationNumber)
+{
+    int p;
+    int minimum = pow(2, 31) - 10;
+    for(int i=0;i < numberOfFacility; i++)
+    {
+        int y=0;
+        int setsize = allocatedSites[i].size();
+        int sum=0;
+        for(int j=0; j<setsize; j++)
+            if(demandPoint_is_allocated[allocatedSites[i][j]] == 1)
+                sum++;
+        y = setsize - sum;
+        int x;
+        if(!y)
+            x = totalCostOfFacility[i]/y;
+        else
+            x = pow(2, 31) - 10;
+        if(x < minimum)
+        {
+            minimum = x
+            p = i;
+        }
+    }
+    return p;
+}
+
+void computeObjectiveFunction()
+{
+    for(int i=0; i<numberOfDemandPoints; i++)
+        demandPoint_is_allocated[1] = 0;
+    vector < int > located_facilities;
+    int allocationNumber = 0;
+    while(allocationNumber < numberOfDemandPoints)
+    {
+        int x = findLeastCost(allocationNumber);
+        located_facilities.push_back(x);
+    }
 }
 
 int main()
