@@ -150,17 +150,54 @@ void findLeastCost(int allocationNumber)
     return p;
 }
 
+void updateDemandPoints(int x)
+{
+    for(int i=0; i<allocatedSites[x].size(); i++)
+        demandPoint_is_allocated[allocatedSites[x][i]] = 1;
+}
+
+void updateFacilities()
+{
+    for(int i=0; i < numberOfDemandPoints; i++)
+    {
+        if(demandPoint_is_allocated[i] == 1)
+        {
+            for(int j=0; j<numberOfFacility; j++)
+            {
+                int place = -1;
+                for(int k=0; k<allocatedSites[j].size(); k++)
+                    if(allocatedSites[j][k] == i)
+                    {
+                        place = k;
+                        break;
+                    }
+                if(place >= 0)
+                    allocatedSites[j].erase(allocatedSites[j].begin()+place);
+            }
+        }
+    }
+}
+
+vector < int > located_facilities;
+
 void computeObjectiveFunction()
 {
     for(int i=0; i<numberOfDemandPoints; i++)
         demandPoint_is_allocated[1] = 0;
-    vector < int > located_facilities;
     int allocationNumber = 0;
     while(allocationNumber < numberOfDemandPoints)
     {
         int x = findLeastCost(allocationNumber);
         located_facilities.push_back(x);
+        allocationNumber += allocatedSites[x].size();
+        updateDemandPoints(x);
+        updateFacilities();
     }
+}
+
+void computeCost()
+{
+
 }
 
 int main()
@@ -170,6 +207,7 @@ int main()
     allocateInitiallyFilteredSites();
     computeCostOfFacility();
     computeObjectiveFunction();
+    computeCost();
 
     return 0;
 }
