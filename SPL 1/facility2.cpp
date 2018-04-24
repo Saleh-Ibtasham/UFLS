@@ -68,6 +68,9 @@ void computeMedianDistance()
 
         facilityRank.push_back(make_pair(i,rankingDistance));
     }
+    for(int i=0; i<facilityRank.size(); i++)
+        cout << facilityRank[i].first << " " << facilityRank[i].second << endl;
+
 }
 
 int shortestDistancedFacility(int i)
@@ -216,13 +219,16 @@ int findMinimum(int x)
             place = i;
         }
     }
-    cout << "Demand Point " << x << " wil be served by facility " << place << endl;
+    cout << "Demand Point " << x << " wil be served by facility " << located_facilities[place] << endl;
     return minimum;
 }
 
 void computeCost()
 {
     int computeSum=0;
+    for(int i=0; i<located_facilities.size(); i++)
+        cout << located_facilities[i] << " ";
+    cout << endl;
     for(int i=0; i<located_facilities.size(); i++)
         computeSum += allocationCostMat[located_facilities[i]];
     for(int i=0; i<numberOfDemandPoints; i++)
