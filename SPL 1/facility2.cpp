@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -16,9 +18,9 @@ int *demandPoint_is_allocated;
 
 void makemat()
 {
-    costMat = new double*[numberOfDemandPoints];
     allocatedSites = new vector<int>[numberOfFacility];
-    for(int i=0; i<numberOfFacility; i++)
+    costMat = new double*[numberOfDemandPoints];
+    for(int i=0; i<numberOfDemandPoints; i++)
         costMat[i] = new double[numberOfFacility];
     allocationCostMat = new double[numberOfFacility];
     totalCostOfFacility = new double[numberOfFacility];
@@ -28,13 +30,14 @@ void makemat()
 void readfile()
 {
     ifstream iFile;
-    iFile.open("inp.txt");
+    iFile.open("p2.txt");
     iFile >> numberOfFacility >> numberOfDemandPoints;
     makemat();
     for(int i=0; i<numberOfDemandPoints; i++)
         for(int j=0; j<numberOfFacility; j++)
             iFile >> costMat[i][j];
-    for(int i=0; i<numberOFDemandPoints; i++)
+
+    for(int i=0; i<numberOfDemandPoints; i++)
         iFile >> allocationCostMat[i];
 }
 
@@ -51,7 +54,7 @@ void computeMedianDistance()
         }
         sort(arr,arr+numberOfDemandPoints);
 
-        double average = (sum*1.0/numberOfDemandPoint*1.0);
+        double average = (sum*1.0/numberOfDemandPoints*1.0);
 
         double rankingDistance;
 
@@ -97,9 +100,9 @@ void computeCostOfFacility()
 void allocateInitiallyFilteredSites()
 {
     for(int i=0; i<numberOfDemandPoints; i++)
-        demandPoint_is_allcoated[i] = 0;
+        demandPoint_is_allocated[i] = 0;
 
-    for(int i=0; i<numberOfFacliity; i++)
+    for(int i=0; i<numberOfFacility; i++)
     {
         for(int j=0; j<numberOfDemandPoints; j++)
         {
@@ -114,16 +117,22 @@ void allocateInitiallyFilteredSites()
     computeCostOfFacility();
 
     for(int i=0; i<numberOfDemandPoints; i++)
-        if(demandPoint_is_allcoated[i] == 0)
+        if(demandPoint_is_allocated[i] == 0)
         {
             int k = shortestDistancedFacility(i);
             allocatedSites[k].push_back(i);
             demandPoint_is_allocated[i] = 1;
         }
+    /*for(int i=0; i<numberOfFacility; i++)
+    {
+        for(int j=0; j<allocatedSites[i].size(); j++)
+            cout << allocatedSites[i][j] << " ";
+        cout << endl;
+    }*/
 
 }
 
-void findLeastCost(int allocationNumber)
+int findLeastCost(int allocationNumber)
 {
     int p;
     int minimum = pow(2, 31) - 10;
@@ -137,13 +146,13 @@ void findLeastCost(int allocationNumber)
                 sum++;
         y = setsize - sum;
         int x;
-        if(!y)
+        if(y)
             x = totalCostOfFacility[i]/y;
         else
             x = pow(2, 31) - 10;
         if(x < minimum)
         {
-            minimum = x
+            minimum = x;
             p = i;
         }
     }
@@ -183,7 +192,7 @@ vector < int > located_facilities;
 void computeObjectiveFunction()
 {
     for(int i=0; i<numberOfDemandPoints; i++)
-        demandPoint_is_allocated[1] = 0;
+        demandPoint_is_allocated[i] = 0;
     int allocationNumber = 0;
     while(allocationNumber < numberOfDemandPoints)
     {
@@ -195,9 +204,33 @@ void computeObjectiveFunction()
     }
 }
 
+int findMinimum(int x)
+{
+    int minimum = costMat[x][located_facilities[0]];
+    int place;
+    for(int i=0; i<located_facilities.size(); i++)
+    {
+        if(minimum < costMat[x][located_facilities[i]])
+        {
+            minimum = costMat[x][located_facilities[i]];
+            place = i;
+        }
+    }
+    cout << "Demand Point " << x << " wil be served by facility " << place << endl;
+    return minimum;
+}
+
 void computeCost()
 {
-
+    int computeSum=0;
+    for(int i=0; i<located_facilities.size(); i++)
+        computeSum += allocationCostMat[located_facilities[i]];
+    for(int i=0; i<numberOfDemandPoints; i++)
+    {
+        int x = findMinimum(i);
+        computeSum += x;
+    }
+    cout << "The Optimal Value is: " << computeSum << endl;
 }
 
 int main()
