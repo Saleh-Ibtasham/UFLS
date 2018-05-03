@@ -190,7 +190,8 @@ void updateFacilities()
     }
 }
 
-vector < int > located_facilities;
+vector < int > located_facilities,finally_located_facilities;
+int *is_finally_located;
 
 void computeObjectiveFunction()
 {
@@ -213,13 +214,18 @@ int findMinimum(int x)
     int place;
     for(int i=0; i<located_facilities.size(); i++)
     {
-        if(minimum < costMat[x][located_facilities[i]])
+        if(costMat[x][located_facilities[i]] < minimum)
         {
             minimum = costMat[x][located_facilities[i]];
             place = i;
         }
     }
     cout << "Demand Point " << x << " wil be served by facility " << located_facilities[place] << endl;
+    if(is_finally_located[located_facilities[place]] == 0)
+    {
+        finally_located_facilities.push_back(located_facilities[place]);
+        is_finally_located[located_facilities[place]] = 1;
+    }
     return minimum;
 }
 
@@ -229,13 +235,16 @@ void computeCost()
     for(int i=0; i<located_facilities.size(); i++)
         cout << located_facilities[i] << " ";
     cout << endl;
-    for(int i=0; i<located_facilities.size(); i++)
-        computeSum += allocationCostMat[located_facilities[i]];
+    is_finally_located = new int[numberOfFacility];
+    for(int i=0; i<numberOfFacility; i++)
+        is_finally_located[i] = 0;
     for(int i=0; i<numberOfDemandPoints; i++)
     {
         int x = findMinimum(i);
         computeSum += x;
     }
+    /*for(int i=0; i<finally_located_facilities.size(); i++)
+        computeSum += allocationCostMat[finally_located_facilities[i]];*/
     cout << "The Optimal Value is: " << computeSum << endl;
 }
 
