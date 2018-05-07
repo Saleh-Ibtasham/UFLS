@@ -33,7 +33,7 @@ void makemat()
 void readfile()
 {
     ifstream iFile;
-    iFile.open("input.txt");
+    iFile.open("pmed1.txt");
     iFile >> facilities >> demand_points >> k;
     makemat();
     for(int i=0; i<demand_points; i++)
@@ -51,14 +51,14 @@ void clustering()
         init[i][0] = facility[i][0];        init[i][1] = facility[i][1];
     }
 
-    for(int l=0; l<(demand_points) ; l++)
+    for(int l=0; l<(demand_points+1) ; l++)
     {
         for(int i=0; i<k; i++)
             myv[i].clear();
         for(int i=0; i<demand_points; i++)
         {
             int x;
-            double mini = 10000;
+            double mini = pow(2,63) - 10;
             for(int j=0; j<k; j++)
             {
                 double dis = sqrt((init[j][0]-mat[i][0])*(init[j][0]-mat[i][0]) + (init[j][1]-mat[i][1])*(init[j][1]-mat[i][1]));
@@ -80,8 +80,11 @@ void clustering()
                 sumx+=mat[*it][0];
                 sumy+=mat[*it][1];
             }
-            init[i][0] = sumx/myv[i].size();
-            init[i][1] = sumx/myv[i].size();
+            if((sumx != 0.0) || (sumy != 0.0))
+            {
+                init[i][0] = sumx/myv[i].size();
+                init[i][1] = sumy/myv[i].size();
+            }
         }
     }
 
@@ -97,7 +100,7 @@ void reverse_greedy()
     for(int i=0; i<k; i++)
     {
         int x;
-        double mini = 10000;
+        double mini = pow(2,63) - 10;
         for(int j=0; j<facilities; j++)
         {
             double dis = sqrt((clust[i][0]-facility[j][0])*(clust[i][0]-facility[j][0]) + (clust[i][1]-facility[j][1])*(clust[i][1]-facility[j][1]));
@@ -113,10 +116,38 @@ void reverse_greedy()
     }
 }
 
+int *is_finally_allocated;
+
+void print_allocation()
+{
+    is_finally_allocated = new int[k];
+    for(int i=0; i<k; i++)
+        is_finally_allocated[i] = 0;
+    for(int i=0; i<demand_points; i++)
+    {
+        int x;
+        double mini = pow(2,63) - 10;
+        for(int j=0; j<k; j++)
+        {
+            double dis = sqrt((clust[j][0]-mat[i][0])*(clust[j][0]-mat[i][0]) + (clust[j][1]-mat[i][1])*(clust[j][1]-mat[i][1]));
+            if(dis < mini)
+            {
+                mini = dis;
+                x = j;
+            }
+        }
+        is_finally_allocated[x] = 1;
+        cout << "Demand point " << mat[i][0] << " " << mat[i][1] << " is serverd by facility " << clust[x][0] << " " << clust[x][1] << endl;
+    }
+}
+
 void print_facility()
 {
+    cout << endl;
+    cout << "The allocated facilities:" << endl << endl;
     for(int i=0; i<k; i++)
-        cout << clust[i][0] << " " << clust[i][1] << endl;
+        if(is_finally_allocated[i] == 1)
+            cout << clust[i][0] << " " << clust[i][1] << endl;
 }
 
 void memoryclear()
@@ -131,6 +162,7 @@ void memoryclear()
     for(int i=0; i<k; i++)
         delete [] clust[i];
     delete [] clust;
+    delete [] is_finally_allocated;
 }
 
 int main()
@@ -138,6 +170,7 @@ int main()
     readfile();
     clustering();
     reverse_greedy();
+    print_allocation();
     print_facility();
     memoryclear();
 
