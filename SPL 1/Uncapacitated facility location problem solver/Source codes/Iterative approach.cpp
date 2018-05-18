@@ -1,48 +1,49 @@
 #include <iostream>
-#include <fstream>
 #include <vector>
+#include <fstream>
 #include <algorithm>
 #include <cmath>
+#include <string>
 
 using namespace std;
 
-int numberOfFacility,numberOfDemandPoints;
-double **costMat,*allocationCostMat;
+int numberOfFacilityIterative,numberOfDemandPoints;
+double **costMatIterative,*allocationCostMatIterative;
 
-vector < pair < int , double > > facilityRank;
+vector < pair < int , double > > facilityRankIterative;
 
-vector <int> *allocatedSites;
+vector <int> *allocatedSitesIterative;
 
-double *totalCostOfFacility;
+double *totalCostOfFacilityIterative;
 int *demandPoint_is_allocated;
 vector <int> chosen_facility;
 int *checked_facility;
 int optimum_is_changed = 0;
 double optimum_value = pow(2,63) - 10;
 
-void makemat()
+void makematForIterative()
 {
-    allocatedSites = new vector<int>[numberOfFacility];
-    costMat = new double*[numberOfDemandPoints];
+    allocatedSitesIterative = new vector<int>[numberOfFacilityIterative];
+    costMatIterative = new double*[numberOfDemandPoints];
     for(int i=0; i<numberOfDemandPoints; i++)
-        costMat[i] = new double[numberOfFacility];
-    allocationCostMat = new double[numberOfFacility];
-    totalCostOfFacility = new double[numberOfFacility];
+        costMatIterative[i] = new double[numberOfFacilityIterative];
+    allocationCostMatIterative = new double[numberOfFacilityIterative];
+    totalCostOfFacilityIterative = new double[numberOfFacilityIterative];
     demandPoint_is_allocated = new int[numberOfDemandPoints];
 }
 
-void readfile()
+void readfileForIterative()
 {
     ifstream iFile;
     iFile.open("p2.txt");
-    iFile >> numberOfFacility >> numberOfDemandPoints;
-    makemat();
+    iFile >> numberOfFacilityIterative >> numberOfDemandPoints;
+    makematForIterative();
     for(int i=0; i<numberOfDemandPoints; i++)
-        for(int j=0; j<numberOfFacility; j++)
-            iFile >> costMat[i][j];
+        for(int j=0; j<numberOfFacilityIterative; j++)
+            iFile >> costMatIterative[i][j];
 
     for(int i=0; i<numberOfDemandPoints; i++)
-        iFile >> allocationCostMat[i];
+        iFile >> allocationCostMatIterative[i];
 }
 
 vector < pair < int , int > > ranked_list;
@@ -51,13 +52,13 @@ int computeTotalDistance(int x)
 {
     int sum=0;
     for(int i=0; i<numberOfDemandPoints; i++)
-        sum += costMat[i][x];
+        sum += costMatIterative[i][x];
     return sum;
 }
 
 void rankFacilities()
 {
-    for(int i=0; i<numberOfFacility; i++)
+    for(int i=0; i<numberOfFacilityIterative; i++)
     {
         int x = computeTotalDistance(i);
         ranked_list.push_back(make_pair(x,i));
@@ -84,9 +85,9 @@ double checkVal(int temporary[], int clusterOfFacility)
         int minimum = 100000000;
         int x = -1;
         for(int j=0; j<clusterOfFacility; j++)
-            if(costMat[i][temporary[j]] < minimum)
+            if(costMatIterative[i][temporary[j]] < minimum)
             {
-                minimum = costMat[i][temporary[j]];
+                minimum = costMatIterative[i][temporary[j]];
                 x=j;
             }
         if(x>-1)
@@ -96,7 +97,7 @@ double checkVal(int temporary[], int clusterOfFacility)
 
     for(int i=0; i<clusterOfFacility; i++)
         if(checked_facility[i] == 1)
-            sum+= allocationCostMat[temporary[i]];
+            sum+= allocationCostMatIterative[temporary[i]];
 
     return sum;
 }
@@ -137,13 +138,13 @@ void combinationCompute(int temporary[], int firstEntry, int lastEntry, int inde
 
 void computeOptimumValue()
 {
-    int n = numberOfFacility/2;
+    int n = numberOfFacilityIterative/2;
     int group_tolerance = 0, combination_tolerance = 0;
     for(int i=1; i<=n; i++)
     {
         combination_tolerance = 0;
         int temporary[i];
-        combinationCompute(temporary,0,numberOfFacility-1,0,i,combination_tolerance);
+        combinationCompute(temporary,0,numberOfFacilityIterative-1,0,i,combination_tolerance);
 
         if(optimum_is_changed)
         {
@@ -162,7 +163,7 @@ void computeOptimumValue()
 
 void printOptimum()
 {
-    cout << "The Optimum Value is " << optimum_value << endl;
+    cout << "The Optimum Value: " << optimum_value << endl;
     cout << endl;
 }
 
@@ -173,23 +174,25 @@ void printDemandPointAssignments()
         int minimum = 100000000;
         int x=-1;
         for(int j=0; j<chosen_facility.size(); j++)
-            if(costMat[i][chosen_facility[j]] < minimum)
+            if(costMatIterative[i][chosen_facility[j]] < minimum)
             {
-                minimum = costMat[i][chosen_facility[j]];
+                minimum = costMatIterative[i][chosen_facility[j]];
                 x = j;
             }
         cout << "Demand Point " << i+1 << " will be served by facility " << chosen_facility[x]+1 <<endl;
     }
+    cout << endl;
 }
+
 int main()
 {
-    readfile();
+    readfileForIterative();
     rankFacilities();
     /*for(int i=0; i<numberOfFacility; i++)
         cout << ranked_list[i].first << " " << ranked_list[i].second << endl;*/
     computeOptimumValue();
+    printDemandPointAssignments();
     printFacilities();
     printOptimum();
-    printDemandPointAssignments();
     return 0;
 }
