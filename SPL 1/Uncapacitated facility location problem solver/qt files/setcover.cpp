@@ -8,7 +8,8 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <string>
-
+#include <QString>
+#include <outputdialogue.h>
 
 using namespace std;
 
@@ -227,6 +228,8 @@ void computeObjectiveFunction()
     }
 }
 
+QString outputSet="";
+
 int findMinimum(int x)
 {
     int minimum = costMat[x][located_facilities[0]];
@@ -239,7 +242,8 @@ int findMinimum(int x)
             place = i;
         }
     }
-    cout << "Demand Point " << x+1 << " wil be served by facility " << located_facilities[place]+1 << endl;
+    outputSet.append(QString("Demand Point %1 will be served by facility %2\n").arg(x+1).arg(located_facilities[place]+1));
+    //cout << "Demand Point " << x+1 << " wil be served by facility " << located_facilities[place]+1 << endl;
     if(is_finally_located[located_facilities[place]] == 0)
     {
         finally_located_facilities.push_back(located_facilities[place]);
@@ -260,20 +264,32 @@ void computeCost()
         int x = findMinimum(i);
         computeSum += x;
     }
-    cout << endl;
-    cout << "The located facilities are:" << endl;
+    //cout << endl;
+    outputSet.append(QString("\n\n"));
+    outputSet.append(QString("The located facilities:\n"));
+    //cout << "The located facilities are:" << endl;
     for(int i=0; i<numberOfFacility; i++)
         if(is_finally_located[i] == 1)
-            cout << i+1 << endl;
-    cout << endl;
+            outputSet.append(QString("%1\n").arg(i+1));
+            //cout << i+1 << endl;
+    //cout << endl;
+    outputSet.append(QString("\n"));
     for(int i=0; i<finally_located_facilities.size(); i++)
         computeSum += allocationCostMat[finally_located_facilities[i]];
-    cout << "The Optimal Value: " << computeSum << endl;
+    //cout << "The Optimal Value: " << computeSum << endl;
+    outputSet.append(QString("The Optimal Value: %1").arg(computeSum));
+}
+
+void print_outputSetCover()
+{
+    Outputdialogue myDialogue(outputSet);
+    myDialogue.setModal(true);
+    myDialogue.exec();
 }
 
 void SetCover::on_pushButton_clicked()
 {
-    QString filename = QFileDialog::getOpenFileName(this,tr("Pick a File"),"E:/Qt/Tools/QtCreator/bin/Spl-1/uncapacitated instances/","Text File(*.txt)");
+    QString filename = QFileDialog::getOpenFileName(this,tr("Pick a File"),"G:/git/Spl1/SPL 1/Uncapacitated facility location problem solver/qt files/uncapacitated instances/","Text File(*.txt)");
     string ss = filename.toStdString();
     readfileForSetCover(ss);
     computeMedianDistance();
@@ -281,5 +297,6 @@ void SetCover::on_pushButton_clicked()
     computeCostOfFacility();
     computeObjectiveFunction();
     computeCost();
+    print_outputSetCover();
     close();
 }

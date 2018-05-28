@@ -13,8 +13,20 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    clusteringapproach.cpp \
+    iterative.cpp \
+    setcover.cpp \
+    outputdialogue.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    clusteringapproach.h \
+    iterative.h \
+    setcover.h \
+    outputdialogue.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    clusteringapproach.ui \
+    iterative.ui \
+    setcover.ui \
+    outputdialogue.ui

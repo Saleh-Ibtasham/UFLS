@@ -7,6 +7,7 @@
 #include <cmath>
 #include <QFileDialog>
 #include <string>
+#include <outputdialogue.h>
 
 using namespace std;
 
@@ -136,6 +137,7 @@ void reverse_greedy()
 }
 
 int *is_finally_allocated;
+QString output = "";
 
 void print_allocation()
 {
@@ -157,20 +159,24 @@ void print_allocation()
             }
         }
         is_finally_allocated[x] = 1;
-        cout << "Demand point " << mat[i][0] << " " << mat[i][1] << " is serverd by facility " << clust[x][0] << " " << clust[x][1] << endl;
+        output.append(QString("Demand point %1 %2 is served by facility %3 %4\n").arg(mat[i][0]).arg(mat[i][1]).arg(clust[x][0]).arg(clust[x][1]));
+        //cout << "Demand point " << mat[i][0] << " " << mat[i][1] << " is serverd by facility " << clust[x][0] << " " << clust[x][1] << endl;
         totalCost += sqrt((clust[x][0]-mat[i][0])*(clust[x][0]-mat[i][0]) + (clust[x][1]-mat[i][1])*(clust[x][1]-mat[i][1]));
     }
-    cout << endl;
-    cout << "The Optimum Value: " << totalCost << endl;
+    output.append(QString("\n\n"));
+    output.append(QString("The Optimum Value: %1\n\n").arg(totalCost));
+    //cout << "The Optimum Value: " << totalCost << endl;
 }
 
 void print_facility()
 {
-    cout << endl;
-    cout << "The allocated facilities:" << endl << endl;
+    //cout << endl;
+    //cout << "The allocated facilities:" << endl << endl;
+    output.append(QString("The allocated facilities:\n\n"));
     for(int i=0; i<k; i++)
         if(is_finally_allocated[i] == 1)
-            cout << clust[i][0] << " " << clust[i][1] << endl;
+            output.append(QString("%1 %2\n").arg(clust[i][0]).arg(clust[i][1]));
+            //cout << clust[i][0] << " " << clust[i][1] << endl;
 }
 
 void memoryclear()
@@ -188,15 +194,23 @@ void memoryclear()
     delete [] is_finally_allocated;
 }
 
+void print_output()
+{
+    Outputdialogue myDialogue(output);
+    myDialogue.setModal(true);
+    myDialogue.exec();
+}
+
 void clusteringApproach::on_pushButton_clicked()
 {
-    QString filename = QFileDialog::getOpenFileName(this,tr("Pick a File"),"E:/Qt/Tools/QtCreator/bin/Spl-1/pmedian instances","Text File(*.txt)");
+    QString filename = QFileDialog::getOpenFileName(this,tr("Pick a File"),"G:/git/Spl1/SPL 1/Uncapacitated facility location problem solver/qt files/pmedian instances/","Text File(*.txt)");
     string ss = filename.toStdString();
     readfile(ss);
     clustering();
     reverse_greedy();
     print_allocation();
     print_facility();
+    print_output();
     memoryclear();
     close();
 }

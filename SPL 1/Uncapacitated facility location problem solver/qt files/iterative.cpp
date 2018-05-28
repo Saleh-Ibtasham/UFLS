@@ -8,6 +8,8 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <string>
+#include <QString>
+#include <outputdialogue.h>
 
 using namespace std;
 
@@ -83,12 +85,17 @@ void rankFacilities()
     sort(ranked_list.begin(), ranked_list.end());
 }
 
+QString outputIt = "";
+
 void printFacilities()
 {
-    cout << "The facilities chosen: " <<endl;
+    //cout << "The facilities chosen: " <<endl;
+    outputIt.append(QString("The facilities chosen: \n"));
     for(int i=0; i<chosen_facility.size(); i++)
-        cout << chosen_facility[i]+1 << endl;
-    cout << endl;
+        outputIt.append(QString("%1\n").arg(chosen_facility[i]+1));
+        //cout << chosen_facility[i]+1 << endl;
+    //cout << endl;
+    outputIt.append(QString("\n"));
 }
 
 double checkVal(int temporary[], int clusterOfFacility)
@@ -180,8 +187,9 @@ void computeOptimumValue()
 
 void printOptimum()
 {
-    cout << "The Optimum Value: " << optimum_value << endl;
-    cout << endl;
+    //cout << "The Optimum Value: " << optimum_value << endl;
+    outputIt.append(QString("The Optimum Value: %1\n\n").arg(optimum_value));
+    //cout << endl;
 }
 
 void printDemandPointAssignments()
@@ -196,13 +204,23 @@ void printDemandPointAssignments()
                 minimum = costMatIterative[i][chosen_facility[j]];
                 x = j;
             }
-        cout << "Demand Point " << i+1 << " will be served by facility " << chosen_facility[x]+1 <<endl;
+        outputIt.append(QString("Demand Point %1 will be served by facility %2\n").arg(i+1).arg(chosen_facility[x]+1));
+        //cout << "Demand Point " << i+1 << " will be served by facility " << chosen_facility[x]+1 <<endl;
     }
-    cout << endl;
+    outputIt.append(QString("\n"));
+    //cout << endl;
 }
+
+void print_outputIterative()
+{
+    Outputdialogue mydialogue(outputIt);
+    mydialogue.setModal(true);
+    mydialogue.exec();
+}
+
 void Iterative::on_pushButton_clicked()
 {
-    QString filename = QFileDialog::getOpenFileName(this,tr("Pick a File"),"E:/Qt/Tools/QtCreator/bin/Spl-1//uncapacitated instances/","Text File(*.txt)");
+    QString filename = QFileDialog::getOpenFileName(this,tr("Pick a File"),"G:/git/Spl1/SPL 1/Uncapacitated facility location problem solver/qt files/uncapacitated instances/","Text File(*.txt)");
     string ss = filename.toStdString();
     readfileForIterative(ss);
     rankFacilities();
@@ -212,5 +230,6 @@ void Iterative::on_pushButton_clicked()
     printDemandPointAssignments();
     printFacilities();
     printOptimum();
+    print_outputIterative();
     close();
 }
