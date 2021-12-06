@@ -85,7 +85,7 @@ This section describes the languages and frameworks used for the project.
 
 ### Usage
 
-*For detailed extension instructions, please refer to the user manual section at the end of the [Documentation](https://github.com/Saleh-Ibtasham/UFLS/blob/master/SPL%201/Uncapacitated%20facility%20location%20problem%20solver/UFLS_documentation.pdf)*
+*For detailed extension instructions, please refer to the user manual section at the end of the [Documentation](https://github.com/Saleh-Ibtasham/UFLS/blob/master/SPL%201/Uncapacitated%20facility%20location%20problem%20solver/documentation/UFLS_documentation.pdf)*
 
 <p align="right"><a href="#">back to top</a></p>
 
