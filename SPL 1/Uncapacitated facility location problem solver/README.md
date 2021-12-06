@@ -1,7 +1,7 @@
 # UFLS (Uncapacitated Facility Location Problem Solver)
 
 [![Gradle Version](https://img.shields.io/badge/C%2B%2B-00599C?style=flat&logo=c%2B%2B&logoColor=white)](https://www.cplusplus.com/)
-[![Gradle Version](https://img.shields.io/badge/Qt-41CD52?style=flat&logo=qt&logoColor=white)](https://www.couchbase.com/products/mobile)
+[![Gradle Version](https://img.shields.io/badge/Qt-41CD52?style=flat&logo=qt&logoColor=white)](https://www.qt.io/product/development-tools)
 [![License](https://img.shields.io/badge/license-Apache-lightgreen)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ---
