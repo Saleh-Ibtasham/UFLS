@@ -28,7 +28,7 @@ UFLS is a tool for solving uncapacitated facility location problems. 3 different
 2. Set Covering Approach
 3. Iterative Approach
 
-<p align="right"><a href="#ufls">back to top</a></p>
+<p align="right"><a href="#table-of-contents">back to top</a></p>
 
 ---
 
@@ -40,7 +40,7 @@ This section describes the languages and frameworks used for the project.
 - [QMake](https://doc.qt.io/qt-5/qmake-manual.html)
 - [Qt Creator](https://www.qt.io/product/development-tools)
 
-<p align="right"><a href="#ufls">back to top</a></p>
+<p align="right"><a href="#table-of-contents">back to top</a></p>
 
 ---
 
@@ -71,7 +71,7 @@ This section describes the languages and frameworks used for the project.
   <tr>
 </table>
 
-<p align="right"><a href="#ufls">back to top</a></p>
+<p align="right"><a href="#table-of-contents">back to top</a></p>
 
 ---
 
@@ -87,7 +87,7 @@ This section describes the languages and frameworks used for the project.
 
 *For detailed extension instructions, please refer to the user manual section at the end of the [Documentation](https://github.com/Saleh-Ibtasham/UFLS/blob/master/SPL%201/Uncapacitated%20facility%20location%20problem%20solver/UFLS_documentation.pdf)*
 
-<p align="right"><a href="#ufls">back to top</a></p>
+<p align="right"><a href="#table-of-contents">back to top</a></p>
 
 ---
 
@@ -99,7 +99,7 @@ Included here are the research articles that inspired this work:
 3. [Varughese, Shaju, et al. (2017)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3826047)
 4. [Adriana Bumb Ph.D. thesis](https://ris.utwente.nl/ws/portalfiles/portal/6073555/t000001e.pdf)
 
-<p align="right"><a href="#ufls">back to top</a></p>
+<p align="right"><a href="#table-of-contents">back to top</a></p>
 
 ---
 
@@ -121,7 +121,7 @@ Included here are the research articles that inspired this work:
     limitations under the License.
 ```
 
-<p align="right"><a href="#ufls">back to top</a></p>
+<p align="right"><a href="#table-of-contents">back to top</a></p>
 
 ---
 
@@ -130,7 +130,7 @@ Included here are the research articles that inspired this work:
 [<img alt="md-saleh-ibtasham" src="https://img.shields.io/badge/website-000000?style=for-the-badge&logoColor=white" />][website]
 [<img alt="md-saleh-ibtasham | LinkedIn" src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />][linkedin]
 
-<p align="right"><a href="#ufls">back to top</a></p>
+<p align="right"><a href="#table-of-contents">back to top</a></p>
 
 
 [website]: https://sites.google.com/view/md-saleh-ibtasham/home
